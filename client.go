@@ -55,19 +55,18 @@ func (c *Client) UserStream() (*Stream, error) {
 	return c.NewStream(UserStreamEndpoint)
 }
 
-func (s *Stream) Listen() <-chan []byte {
-	ch := make(chan []byte)
-
-	go func() {
-		for s.Scanner.Scan() {
-			line := s.Scanner.Bytes()
-			if len(line) > 0 {
-				ch <- line
-			}
+func (s *Stream) Scan() ([]byte, error) {
+	var line []byte
+	for s.Scanner.Scan() {
+		line = s.Scanner.Bytes()
+		if len(line) > 0 {
+			break
 		}
-	}()
-
-	return ch
+	}
+	if err := s.Scanner.Err(); err != nil {
+		return nil, err
+	}
+	return line, nil
 }
 
 func (s *Stream) Close() {
