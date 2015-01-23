@@ -33,14 +33,14 @@ func NewClient(consumerKey, consumerSecret, accessToken, accessTokenSecret strin
 	}
 }
 
-func (c *Client) NewStream(endpoint string) (*Stream, error) {
+func (c *Client) NewStream(endpoint string, param map[string]string) (*Stream, error) {
 	consumer := oauth.NewConsumer(
 		c.ConsumerKey,
 		c.ConsumerSecret,
 		oauth.ServiceProvider{},
 	)
 
-	res, err := consumer.Post(endpoint, nil, c.AccessToken)
+	res, err := consumer.Post(endpoint, param, c.AccessToken)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +51,8 @@ func (c *Client) NewStream(endpoint string) (*Stream, error) {
 	}, nil
 }
 
-func (c *Client) UserStream() (*Stream, error) {
-	return c.NewStream(UserStreamEndpoint)
+func (c *Client) UserStream(param map[string]string) (*Stream, error) {
+	return c.NewStream(UserStreamEndpoint, param)
 }
 
 func (s *Stream) Scan() ([]byte, error) {
