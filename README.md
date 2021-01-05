@@ -1,6 +1,6 @@
 # go-twitter-stream
 
-a Twitter streaming API client written in Go
+a Twitter streaming API client for Go
 
 ## Example
 
